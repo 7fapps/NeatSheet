@@ -1,0 +1,21 @@
+{
+  "name": "NeatSheet",
+  "short_name": "NeatSheet",
+  "description": "Clean up messy CSV, Excel, Word, and photo contact lists.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6f9",
+  "theme_color": "#305496",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

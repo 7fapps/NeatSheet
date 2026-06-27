@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#305496">
+  <link rel="icon" href="/static/icon-192.png">
+  <title>NeatSheet</title>
+  <style>
+    body {
+      font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+      background-color: #f4f6f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 420px;
+    }
+
+    h1 {
+      color: #305496;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: #666;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .drop-zone {
+      border: 2px dashed #305496;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .drop-zone:hover {
+      background-color: #f0f4fa;
+    }
+
+    .drop-zone p {
+      margin: 0;
+      color: #305496;
+      font-weight: 500;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    #file-name {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #333;
+    }
+
+    button {
+      background-color: #305496;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #244073;
+    }
+
+    .flash {
+      background-color: #fdecea;
+      color: #b3261e;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>NeatSheet</h1>
+    <p class="subtitle">Upload a messy CSV, Excel, Word, or photo file and get a clean version back.</p>
+
+    <!-- Show error messages (e.g. wrong file type) -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <label for="file-input">
+        <div class="drop-zone" onclick="document.getElementById('file-input').click()">
+          <p>📂 Click to choose a file</p>
+          <p style="font-size:12px; color:#888; margin-top:6px;">CSV, XLSX, XLS, DOCX, JPG, or PNG</p>
+        </div>
+      </label>
+
+      <input type="file" id="file-input" name="file" accept=".csv,.xlsx,.xls,.docx,.jpg,.jpeg,.png"
+             onchange="document.getElementById('file-name').innerText = this.files[0]?.name || ''">
+
+      <div id="file-name"></div>
+
+      <button type="submit">Clean My File</button>
+    </form>
+
+    <p style="font-size:11px; color:#999; margin-top:16px;">
+      📷 Uploading a photo? If any text couldn't be read clearly,
+      it'll be listed in a "Needs Review" tab in your downloaded file.
+    </p>
+  </div>
+
+</body>
+
+<script>
+  // Registers the service worker, required for the browser to
+  // consider this app "installable" (Add to Home Screen on Android).
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/service-worker.js")
+      .catch((err) => console.log("Service worker registration failed:", err));
+  }
+</script>
+
+</html>
